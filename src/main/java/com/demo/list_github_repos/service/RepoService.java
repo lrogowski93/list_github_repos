@@ -24,7 +24,6 @@ import static java.util.function.Predicate.*;
 public class RepoService {
 
     private final RestTemplateConfig restTemplateConfig;
-
     public RepoResponse getRepos(String username) {
         ResponseEntity<Repo[]> responseEntity;
         try {

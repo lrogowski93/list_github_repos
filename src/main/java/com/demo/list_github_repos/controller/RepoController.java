@@ -1,13 +1,15 @@
 package com.demo.list_github_repos.controller;
 
+import com.demo.list_github_repos.controller.request.RepoRequest;
 import com.demo.list_github_repos.controller.response.ErrorResponse;
 import com.demo.list_github_repos.controller.response.RepoResponse;
 import com.demo.list_github_repos.service.RepoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class RepoController {
     private final RepoService repoService;
 
-    @GetMapping("/repos/{username}")
-    public ResponseEntity<?> getRepos(@PathVariable String username){
-        RepoResponse repoResponse = repoService.getRepos(username);
+    @GetMapping("/repos")
+    public ResponseEntity<?> getRepos(@Valid @RequestBody RepoRequest request){
+        RepoResponse repoResponse = repoService.getRepos(request.username());
 
         if(repoResponse.status()==HttpStatus.OK.value())
             return ResponseEntity.ok().body(repoResponse.repoList());
