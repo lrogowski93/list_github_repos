@@ -1,7 +1,6 @@
 package com.demo.list_github_repos.service;
 
 import com.demo.list_github_repos.config.RestTemplateConfig;
-import com.demo.list_github_repos.controller.response.ErrorResponse;
 import com.demo.list_github_repos.controller.response.RepoResponse;
 import com.demo.list_github_repos.model.Branch;
 import com.demo.list_github_repos.model.Repo;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,18 +23,9 @@ public class RepoService {
 
     private final RestTemplateConfig restTemplateConfig;
     public RepoResponse getRepos(String username) {
-        ResponseEntity<Repo[]> responseEntity;
-        try {
-            responseEntity = restTemplateConfig.restTemplate()
-                    .exchange(
-                            "https://api.github.com/users/{username}/repos", HttpMethod.GET, null, Repo[].class, username
-                    );
-        } catch(HttpClientErrorException ex){
-            return RepoResponse.builder()
-                    .status(ex.getStatusCode().value())
-                    .message(ex.getResponseBodyAs(ErrorResponse.class).message())
-                    .build();
-        }
+
+        ResponseEntity<Repo[]> responseEntity = restTemplateConfig.restTemplate()
+                .exchange("https://api.github.com/users/{username}/repos", HttpMethod.GET, null, Repo[].class, username);
 
         List<Repo> repoList = new ArrayList<>(Arrays.asList(responseEntity.getBody()));
 
@@ -47,7 +36,6 @@ public class RepoService {
                 .repoList(repoList.stream().filter(not(Repo::isFork))
                         .collect(Collectors.toList()))
                 .build();
-
     }
 
     private List<Branch> getBranches(String username, String repo){
