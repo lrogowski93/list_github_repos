@@ -32,7 +32,7 @@ class RepoControllerTest {
         //given
         RepoResponse repoResponse = RepoResponse.builder()
                 .status(HttpStatus.OK.value())
-                .repoList(Arrays.asList(new Repo("repo1", new RepoOwner("testuser"), true, null),new Repo("repo2", new RepoOwner("testuser"), false, null)))
+                .repoList(Arrays.asList(new Repo("repo1", new RepoOwner("testuser"), true, null), new Repo("repo2", new RepoOwner("testuser"), false, null)))
                 .build();
 
         when(repoService.getRepos("testuser")).thenReturn(repoResponse);
@@ -49,7 +49,7 @@ class RepoControllerTest {
     }
 
     @Test
-    void shouldGetErrorResponse(){
+    void shouldGetErrorResponse() {
         //given
         RepoResponse repoResponse = RepoResponse.builder()
                 .status(HttpStatus.NOT_FOUND.value())
@@ -63,9 +63,9 @@ class RepoControllerTest {
         ResponseEntity<?> responseEntity = repoController.getRepos("testuser");
 
         //then
-        assertEquals(HttpStatus.NOT_FOUND,responseEntity.getStatusCode());
-        assertEquals(((ErrorResponse) responseEntity.getBody()).message(),"error message");
-        assertEquals(((ErrorResponse) responseEntity.getBody()).status(),HttpStatus.NOT_FOUND.value());
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals(((ErrorResponse) responseEntity.getBody()).message(), "error message");
+        assertEquals(((ErrorResponse) responseEntity.getBody()).status(), HttpStatus.NOT_FOUND.value());
 
         verify(repoService, times(1)).getRepos("testuser");
     }

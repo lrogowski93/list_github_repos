@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static java.util.function.Predicate.*;
+import static java.util.function.Predicate.not;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class RepoService {
 
         List<Repo> repoList = new ArrayList<>(Arrays.asList(responseEntity.getBody()));
 
-        setBranches(username,repoList);
+        setBranches(username, repoList);
 
         return RepoResponse.builder()
                 .status(responseEntity.getStatusCode().value())
@@ -39,14 +39,14 @@ public class RepoService {
                 .build();
     }
 
-    private List<Branch> getBranches(String username, String repo){
+    private List<Branch> getBranches(String username, String repo) {
         return Arrays.asList(Objects.requireNonNull(restTemplateConfig.restTemplate()
                 .getForObject("https://api.github.com/repos/{username}/{repo}/branches", Branch[].class, username, repo)));
     }
 
-    private void setBranches(String username, List<Repo> repoList){
+    private void setBranches(String username, List<Repo> repoList) {
         repoList.stream().forEach(
-                repo->repo.setBranches(getBranches(username,repo.getName()))
+                repo -> repo.setBranches(getBranches(username, repo.getName()))
         );
     }
 

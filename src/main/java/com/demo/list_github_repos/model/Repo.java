@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Repo{
+public class Repo {
     private String name;
     private RepoOwner owner;
     private boolean fork;

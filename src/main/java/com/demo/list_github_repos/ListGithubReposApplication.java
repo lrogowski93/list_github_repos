@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ListGithubReposApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ListGithubReposApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ListGithubReposApplication.class, args);
+    }
 
 }

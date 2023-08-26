@@ -22,7 +22,7 @@ public class CustomExceptionHandler {
     public ErrorResponse notFoundException(NotFound ex) {
         return ErrorResponse.builder()
                 .status(ex.getStatusCode().value())
-                .message(ex.getResponseBodyAs(ErrorResponse.class).message()+". User not found.")
+                .message(ex.getResponseBodyAs(ErrorResponse.class).message() + ". User not found.")
                 .build();
     }
 
@@ -30,13 +30,13 @@ public class CustomExceptionHandler {
     @ResponseBody
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
     public ResponseEntity<ErrorResponse> mediaTypeNotAcceptableException(HttpMediaTypeNotAcceptableException ex) {
-      return ResponseEntity
-              .status(ex.getStatusCode())
-              .contentType(MediaType.APPLICATION_JSON)
-              .body(ErrorResponse.builder()
-                      .status(ex.getStatusCode().value())
-                      .message(ex.getMessage()+". Use Accept: application/json header.")
-                      .build());
+        return ResponseEntity
+                .status(ex.getStatusCode())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ErrorResponse.builder()
+                        .status(ex.getStatusCode().value())
+                        .message(ex.getMessage() + ". Use Accept: application/json header.")
+                        .build());
     }
 
     @ResponseStatus(FORBIDDEN)
