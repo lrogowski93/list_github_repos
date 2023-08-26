@@ -92,4 +92,26 @@ class RepoServiceTest {
         assertEquals("commitHash1", repoList.get(0).getBranches().get(0).commit().sha());
     }
 
+    @Test
+    void shouldGetRepoDetails(){
+        //given
+        ResponseEntity<Repo[]> responseEntity =new ResponseEntity<>(
+                new Repo[]{
+                        new Repo("repo3", new RepoOwner("testuser"), false, null),
+                }, HttpStatus.OK
+        );
+        Branch[] branchList = {new Branch("main", new Commit("commitHash1"))};
+        when(restTemplateConfig.restTemplate().exchange(anyString(), eq(HttpMethod.GET), ArgumentMatchers.any(), eq(Repo[].class), anyString())).thenReturn(responseEntity);
+        when(restTemplateConfig.restTemplate().getForObject(anyString(),eq(Branch[].class),anyString(),anyString() )).thenReturn(branchList);
+
+        //when
+        RepoResponse repoResponse = repoService.getRepos("testuser");
+        List<Repo> repoList = repoResponse.repoList();
+
+        //then
+        assertEquals("repo3",repoList.get(0).getName());
+        assertEquals("testuser",repoList.get(0).getOwner().login());
+        assertEquals("main",repoList.get(0).getBranches().get(0).name());
+    }
+
 }
