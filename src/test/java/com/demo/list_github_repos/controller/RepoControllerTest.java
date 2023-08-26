@@ -1,5 +1,6 @@
 package com.demo.list_github_repos.controller;
 
+import com.demo.list_github_repos.controller.response.ErrorResponse;
 import com.demo.list_github_repos.controller.response.RepoResponse;
 import com.demo.list_github_repos.model.Repo;
 import com.demo.list_github_repos.model.RepoOwner;
@@ -38,6 +39,7 @@ class RepoControllerTest {
 
         //when
         ResponseEntity<?> responseEntity = repoController.getRepos("testuser");
+
         //then
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
@@ -45,4 +47,27 @@ class RepoControllerTest {
 
         verify(repoService, times(1)).getRepos("testuser");
     }
+
+    @Test
+    void shouldGetErrorResponse(){
+        //given
+        RepoResponse repoResponse = RepoResponse.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message("error message")
+                .repoList(null)
+                .build();
+
+        when(repoService.getRepos("testuser")).thenReturn(repoResponse);
+
+        //when
+        ResponseEntity<?> responseEntity = repoController.getRepos("testuser");
+
+        //then
+        assertEquals(HttpStatus.NOT_FOUND,responseEntity.getStatusCode());
+        assertEquals(((ErrorResponse) responseEntity.getBody()).message(),"error message");
+        assertEquals(((ErrorResponse) responseEntity.getBody()).status(),HttpStatus.NOT_FOUND.value());
+
+        verify(repoService, times(1)).getRepos("testuser");
+    }
+
 }
