@@ -28,14 +28,16 @@ public class RepoService {
         ResponseEntity<Repo[]> responseEntity = restTemplateConfig.restTemplate()
                 .exchange("https://api.github.com/users/{username}/repos", HttpMethod.GET, null, Repo[].class, username);
 
-        List<Repo> repoList = new ArrayList<>(Arrays.asList(responseEntity.getBody()));
+        List<Repo> repoList = new ArrayList<>(
+                Arrays.asList(responseEntity.getBody()).stream().filter(not(Repo::isFork))
+                        .collect(Collectors.toList())
+        );
 
         setBranches(username, repoList);
 
         return RepoResponse.builder()
                 .status(responseEntity.getStatusCode().value())
-                .repoList(repoList.stream().filter(not(Repo::isFork))
-                        .collect(Collectors.toList()))
+                .repoList(repoList)
                 .build();
     }
 
