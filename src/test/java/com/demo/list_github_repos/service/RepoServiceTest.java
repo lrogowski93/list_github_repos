@@ -60,9 +60,7 @@ class RepoServiceTest {
                         new Repo("repo3", new RepoOwner("testuser"), true, null),
                 }, HttpStatus.OK
         );
-        Branch[] branchList = {new Branch("main", new Commit("commitHash1"))};
         when(restTemplateConfig.restTemplate().exchange(anyString(), eq(HttpMethod.GET), ArgumentMatchers.any(), eq(Repo[].class), anyString())).thenReturn(responseEntity);
-        when(restTemplateConfig.restTemplate().getForObject(anyString(), eq(Branch[].class), anyString(), anyString())).thenReturn(branchList);
 
         //when
         RepoResponse repoResponse = repoService.getRepos("testuser");
