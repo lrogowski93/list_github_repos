@@ -22,7 +22,7 @@ public class CustomExceptionHandler {
     public ErrorResponse notFoundException(NotFound ex) {
         return ErrorResponse.builder()
                 .status(ex.getStatusCode().value())
-                .message(ex.getResponseBodyAs(ErrorResponse.class).message())
+                .message(ex.getResponseBodyAs(ErrorResponse.class).message()+". User not found.")
                 .build();
     }
 
@@ -35,7 +35,7 @@ public class CustomExceptionHandler {
               .contentType(MediaType.APPLICATION_JSON)
               .body(ErrorResponse.builder()
                       .status(ex.getStatusCode().value())
-                      .message(ex.getMessage())
+                      .message(ex.getMessage()+". Use Accept: application/json header.")
                       .build());
     }
 
